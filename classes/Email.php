@@ -51,18 +51,19 @@ class Email {
 
     public function enviarInstrucciones() {
 
-        // create a new object
-        $mail = new PHPMailer();
-        $mail->isSMTP();
-        $mail->Host = $_ENV['EMAIL_HOST'];
-        $mail->SMTPAuth = true;
-        $mail->Port = $_ENV['EMAIL_PORT'];
-        $mail->Username = $_ENV['EMAIL_USER'];
-        $mail->Password = $_ENV['EMAIL_PASS'];
-    
-        $mail->setFrom('cuentas@devwebcamp.com');
-        $mail->addAddress($this->email, $this->nombre);
-        $mail->Subject = 'Reestablece tu password';
+       // Crear el objeto de email
+       $mail = new PHPMailer();
+       $mail->isSMTP();
+       $mail->Host       = 'smtp.gmail.com';
+       $mail->SMTPAuth   = true;
+       $mail->Username   = 'pruebasphpmvc@gmail.com';
+       $mail->Password   = 'oizc xlcs tnlt lvkh';  
+       $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+       $mail->Port       = 587;
+
+       $mail->setFrom('pruebasphpmvc@gmail.com');
+       $mail->addAddress($this->email);
+       $mail->Subject = 'Restablece tu contraseña';
 
         // Set HTML
         $mail->isHTML(TRUE);

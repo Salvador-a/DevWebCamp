@@ -19,19 +19,18 @@ class Email {
 
     public function enviarConfirmacion() {
 
-          // Crear el objeto de email
-        $mail = new PHPMailer();
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'pruebasphpmvc@gmail.com';
-        $mail->Password   = 'oizc xlcs tnlt lvkh';  
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = 587;
-
-        $mail->setFrom('pruebasphpmvc@gmail.com');
-        $mail->addAddress($this->email);
-        $mail->Subject = 'Confirma tu cuenta';
+         // create a new object
+         $mail = new PHPMailer();
+         $mail->isSMTP();
+         $mail->Host = $_ENV['EMAIL_HOST'];
+         $mail->SMTPAuth = true;
+         $mail->Port = $_ENV['EMAIL_PORT'];
+         $mail->Username = $_ENV['EMAIL_USER'];
+         $mail->Password = $_ENV['EMAIL_PASS'];
+     
+         $mail->setFrom('cuentas@devwebcamp.com');
+         $mail->addAddress($this->email, $this->nombre);
+         $mail->Subject = 'Confirma tu Cuenta';
 
          // Set HTML
          $mail->isHTML(TRUE);
@@ -51,19 +50,18 @@ class Email {
 
     public function enviarInstrucciones() {
 
-       // Crear el objeto de email
-       $mail = new PHPMailer();
-       $mail->isSMTP();
-       $mail->Host       = 'smtp.gmail.com';
-       $mail->SMTPAuth   = true;
-       $mail->Username   = 'pruebasphpmvc@gmail.com';
-       $mail->Password   = 'oizc xlcs tnlt lvkh';  
-       $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-       $mail->Port       = 587;
-
-       $mail->setFrom('pruebasphpmvc@gmail.com');
-       $mail->addAddress($this->email);
-       $mail->Subject = 'Restablece tu contraseña';
+        // create a new object
+        $mail = new PHPMailer();
+        $mail->isSMTP();
+        $mail->Host = $_ENV['EMAIL_HOST'];
+        $mail->SMTPAuth = true;
+        $mail->Port = $_ENV['EMAIL_PORT'];
+        $mail->Username = $_ENV['EMAIL_USER'];
+        $mail->Password = $_ENV['EMAIL_PASS'];
+    
+        $mail->setFrom('cuentas@devwebcamp.com');
+        $mail->addAddress($this->email, $this->nombre);
+        $mail->Subject = 'Reestablece tu password';
 
         // Set HTML
         $mail->isHTML(TRUE);
@@ -71,7 +69,7 @@ class Email {
 
         $contenido = '<html>';
         $contenido .= "<p><strong>Hola " . $this->nombre .  "</strong> Has solicitado reestablecer tu password, sigue el siguiente enlace para hacerlo.</p>";
-        $contenido .= "<p>Presiona aquí: <a href='" . $_ENV['HOST'] . "/recuperar?token=" . $this->token . "'>Reestablecer Password</a>";        
+        $contenido .= "<p>Presiona aquí: <a href='" . $_ENV['HOST'] . "/reestablecer?token=" . $this->token . "'>Reestablecer Password</a>";        
         $contenido .= "<p>Si tu no solicitaste este cambio, puedes ignorar el mensaje</p>";
         $contenido .= '</html>';
         $mail->Body = $contenido;

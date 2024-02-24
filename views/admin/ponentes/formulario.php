@@ -50,12 +50,12 @@
     </div>
 
     <div class="formulario__campo">
-        <label for="Imagen" class="formulario__label">Imagen</label>
+        <label for="imagen" class="formulario__label">Imagen</label>
         <input
             type="file"
             class="formulario__input formulario__input--file"
-            id="Imagen"
-            name="Imagen"
+            id="imagen"
+            name="imagen"
         >
     </div>
    

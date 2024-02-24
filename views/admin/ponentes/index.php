@@ -29,13 +29,13 @@
                         </td>
                         
                         <td class="table__td--acciones">
-                            <a href="/admin/ponentes/editar?id=<?php echo $ponente->id; ?>">
+                            <a class="table__accion table__accion--editar" href="/admin/ponentes/editar?id=<?php echo $ponente->id; ?>">
                                 <i class="fa-solid fa-user-pen"></i>
                                 Editar
                             </a>
 
                             <form action="" class="table__formulario">
-                                <button type="submit">
+                                <button class="table__accion table__accion--eliminar" type="submit">
                                     <i class="fa-solid fa-user-slash"></i>
                                     Eliminar
                                 </button>

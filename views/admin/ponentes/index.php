@@ -1,7 +1,7 @@
-<h2 class="dashboard__heading"><?php echo $titulo; ?> </h2>
+<h2 class="dashboard__heading"><?php echo $titulo; ?></h2>
 
 <div class="dashboard__contenedor-boton">
-    <a href="/admin/ponentes/crear" class="dashboard__boton">
+    <a class="dashboard__boton" href="/admin/ponentes/crear">
         <i class="fa-solid fa-circle-plus"></i>
         Añadir Ponente
     </a>
@@ -27,7 +27,6 @@
                         <td class="table__td">
                             <?php echo $ponente->ciudad . ", " . $ponente->pais; ?>
                         </td>
-                        
                         <td class="table__td--acciones">
                             <a class="table__accion table__accion--editar" href="/admin/ponentes/editar?id=<?php echo $ponente->id; ?>">
                                 <i class="fa-solid fa-user-pen"></i>
@@ -37,28 +36,19 @@
                             <form method="POST" action="/admin/ponentes/eliminar" class="table__formulario">
                                 <input type="hidden" name="id" value="<?php echo $ponente->id; ?>">
                                 <button class="table__accion table__accion--eliminar" type="submit">
-                                    <i class="fa-solid fa-user-slash"></i>
+                                    <i class="fa-solid fa-circle-xmark"></i>
                                     Eliminar
                                 </button>
                             </form>
                         </td>
-
                     </tr>
-                    
 
                 <?php } ?>
-
             </tbody>
-
-        </tablet>
-
+        </table>
     <?php } else { ?>
-        <p class="text-center">
-            No hay ponentes registrados
-        </p>
-
+        <p class="text-center">No Hay Ponentes Aún</p>
     <?php } ?>
-
 </div>
 
 <?php 

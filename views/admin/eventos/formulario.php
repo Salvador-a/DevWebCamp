@@ -9,6 +9,7 @@
             id="nombre"
             name="nombre"
             placeholder="Nombre Evento"
+            value="<?php echo $evento->nombre; ?>"
             
         >
     </div>
@@ -22,22 +23,22 @@
             placeholder="Descripción Evento"
             rows="8"
             
-        ></textarea>
+        ><?php echo $evento->descripcion; ?></textarea>
     </div>
 
     <div class="formulario__campo">
-        <label for="categoria" class="formulario__label">Categoria o Tipo de Evento</label>
-        <select 
+        <label for="categoria" class="formulario__label">Categoría o Tipo de Evento</label>
+        <select
             class="formulario__select"
             id="categoria"
-            name="categoria_id">
-                <option value="" disabled selected>--Seleccione--</option>
-                <?php foreach($categorias as $categoria) { ?>
-                    <option value="<?php echo $categoria->id; ?>"><?php echo $categoria->nombre; ?></option>
-                    
-                <?php } ?>  
+            name="categoria_id"
+        >
+            <option value="">- Seleccionar -</option>
+            <?php foreach($categorias as $categoria) { ?>
+                <option <?php echo ($evento->categoria_id === $categoria->id) ? 'selected' : '' ?> value="<?php echo $categoria->id; ?>"><?php echo $categoria->nombre; ?></option>
+            <?php } ?>
         </select>
-    </div>
+    </div> 
 
     <div class="formulario__campo">
         <label for="categoria" class="formulario__label">Selecciona el Día</label>
@@ -55,12 +56,16 @@
                     />
                 </div>
             <?php } ?>
+        </div>
+
+        <input type="hidden" name="dia_id" value="">
+
     </div>
 
    <div id="horas" class="formulario__campo">
         <label class="formulario__label">Selecciona Hora</label>
 
-        <ul class="horas">
+        <ul id="horas" class="horas">
             <?php foreach($horas as $hora) { ?>
                 <li class="horas__hora"><?php echo $hora->hora; ?></li>
             <?php }?>
@@ -85,15 +90,15 @@
 
 
     <div class="formulario__campo">
-        <label for="disponobles" class="formulario__label">Lugares Disponibles</label>
+        <label for="disponibles" class="formulario__label">Lugares Disponibles</label>
         <input
             type="number"
             min="1"
             class="formulario__input"
-            id="disponobles"
-            name="disponobles"
-            placeholder=" Ej. 20"
-            
+            id="disponibles"
+            name="disponibles"
+            placeholder="Ej. 20"
+            value="<?php echo $evento->disponibles; ?>"
         >
     </div>
 

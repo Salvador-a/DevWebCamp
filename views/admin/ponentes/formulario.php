@@ -48,7 +48,6 @@
             value="<?php echo $ponente->pais ?? ''; ?>"
         >
     </div>
-
     <div class="formulario__campo">
         <label for="imagen" class="formulario__label">Imagen</label>
         <input
@@ -68,34 +67,31 @@
                 <img src="<?php echo $_ENV['HOST'] . '/img/speakers/' . $ponente->imagen; ?>.png" alt="Imagen Ponente">
             </picture>
         </div>
+
     <?php } ?>
-   
 </fieldset>
+
 
 <fieldset class="formulario__fieldset">
     <legend class="formulario__legend">Información Extra</legend>
 
     <div class="formulario__campo">
-        <label for="tags_input" class="formulario__label">Áreas de Experiensia (separadas por coma)</label>
+        <label for="tags_input" class="formulario__label">Áreas de Experiencia (separadas por coma)</label>
         <input
             type="text"
             class="formulario__input"
             id="tags_input"
-            placeholder="Ej, Node.js, React, Angular, PHP, CSS, HTML , UX / UI"
+            placeholder="Ej. Node.js, PHP, CSS, Laravel, UX / UI"
         >
+
+        <div id="tags" class="formulario__listado"></div>
+        <input type="hidden" name="tags" value="<?php echo $ponente->tags ?? ''; ?>"> 
     </div>
-
-    <div id="tags" class="formulario__listado">
-
-    </div>
-    <input type="hidden" name="tags" value="<?php echo $ponente->tags ?? ''; ?>">
-
 </fieldset>
 
 <fieldset class="formulario__fieldset">
     <legend class="formulario__legend">Redes Sociales</legend>
 
-    
     <div class="formulario__campo">
         <div class="formulario__contenedor-icono">
             <div class="formulario__icono">
@@ -125,7 +121,7 @@
             >
         </div>
     </div>
-    
+
     <div class="formulario__campo">
         <div class="formulario__contenedor-icono">
             <div class="formulario__icono">
@@ -135,7 +131,7 @@
                 type="text"
                 class="formulario__input--sociales"
                 name="redes[youtube]"
-                placeholder="Youtube"
+                placeholder="YouTube"
                 value="<?php echo $redes->youtube ?? ''; ?>"
             >
         </div>
@@ -186,5 +182,4 @@
         </div>
     </div>
 
-   
 </fieldset>

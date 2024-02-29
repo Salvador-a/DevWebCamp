@@ -80,14 +80,16 @@
     <legend class="formulario__legend">Información Extra</legend>
 
     <div class="formulario__campo">
-        <label for="ponentes" class="formulario__label">Ponentes</label>
+        <label for="ponentes" class="formulario__label">Ponente</label>
         <input
             type="text"
             class="formulario__input"
             id="ponentes"
-            placeholder=" Buscar Ponentes "
-            
+            placeholder="Buscar Ponente"
         >
+        <ul id="listado-ponentes" class="listado-ponentes"></ul>
+        <input type="hidden" name="ponente_id" value="">
+        
     </div>
 
 

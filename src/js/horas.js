@@ -1,23 +1,22 @@
-(function() {
+(function(){
+    const horas = document.querySelector('#horas')
 
-    const horas = document.querySelector('#horas');
-    
-    if (horas)  {
+    if(horas) {
+        const categoria = document.querySelector('[name="categoria_id"]')
+        const dias = document.querySelectorAll('[name="dia"]');
+        const inputHiddenDia = document.querySelector('[name="dia_id"]');
+        const inputHiddenHora = document.querySelector('[name="hora_id"]');
 
-        
-        const categoria_id =  document.querySelector('[name= "categoria_id"]');
-        const dias = document.querySelectorAll('[name= "dia"]');
-        const inputHiddenDia = document.querySelector('[name="dia_id"]')
-        const inputHiddenHora = document.querySelector('[name="hora_id"]')
-        
-        categoria_id.addEventListener('change', terminoBusqueda)
+        categoria.addEventListener('change', terminoBusqueda)
         dias.forEach( dia => dia.addEventListener('change', terminoBusqueda))
-        
+
+
         let busqueda = {
-            categoria_id: +categoria_id.value || '',
-            dia: + inputHiddenDia.value || ''
+            categoria_id: +categoria.value || '',
+            dia: +inputHiddenDia.value || ''
         }
 
+                
         if(!Object.values(busqueda).includes('')) {
             (async () => {
                 await buscarEventos();
@@ -31,27 +30,26 @@
 
                 horaSeleccionada.onclick = seleccionarHora;
             })()
-        }   
-
+        }
 
         function terminoBusqueda(e) {
             busqueda[e.target.name] = e.target.value;
 
-            //Reinicio los casmpos ocultos y el select de horas
+            // Reiniciar los campos ocultos y el selector de horas
             inputHiddenHora.value = '';
             inputHiddenDia.value = '';
-           
-            const horaPRevia = document.querySelector('.horas__hora--seleccionada');
-            if(horaPRevia) {
-                horaPRevia.classList.remove('horas__hora--seleccionada');
+            
+            const horaPrevia = document.querySelector('.horas__hora--seleccionada')
+            if(horaPrevia) {
+                horaPrevia.classList.remove('horas__hora--seleccionada')
             }
 
             if(Object.values(busqueda).includes('')) {
-                return;
+                return
             }
 
             buscarEventos();
-        } 
+        }
 
         async function buscarEventos() {
             const { dia, categoria_id } = busqueda
@@ -59,52 +57,40 @@
 
             const resultado = await fetch(url);
             const eventos = await resultado.json();
-
             obtenerHorasDisponibles(eventos);
-
         }
 
         function obtenerHorasDisponibles(eventos) {
-
             // Reiniciar las horas
             const listadoHoras = document.querySelectorAll('#horas li');
-            listadoHoras.forEach(li => li.classList.add('horas__hora--deshabilitada'));
+            listadoHoras.forEach(li => li.classList.add('horas__hora--deshabilitada'))
 
-            // comprobar eventos ya tomados, y quitar la clase de deshabilitado
-            const horasTomadas = eventos.map( evento => evento.hora_id);
+            // Comprobar eventos ya tomados, y quitar la variable de deshabilitado
+            const horasTomadas = eventos.map( evento => evento.hora_id);            
             const listadoHorasArray = Array.from(listadoHoras);
 
-            const resultado = listadoHorasArray.filter( li => !horasTomadas.includes(li.dataset.horaId));
+            const resultado = listadoHorasArray.filter( li =>  !horasTomadas.includes(li.dataset.horaId) );
             resultado.forEach( li => li.classList.remove('horas__hora--deshabilitada'))
 
             const horasDisponibles = document.querySelectorAll('#horas li:not(.horas__hora--deshabilitada)');
             horasDisponibles.forEach( hora => hora.addEventListener('click', seleccionarHora));
- 
         }
 
         function seleccionarHora(e) {
-
-            // Desabilitar la hora previa, si hay un nuievo click
-            const horaPRevia = document.querySelector('.horas__hora--seleccionada');
-            if(horaPRevia) {
-                horaPRevia.classList.remove('horas__hora--seleccionada');
+            // Deshabilitar la hora previa, si hay un nuevo click
+            const horaPrevia = document.querySelector('.horas__hora--seleccionada')
+            if(horaPrevia) {
+                horaPrevia.classList.remove('horas__hora--seleccionada')
             }
 
-
             // Agregar clase de seleccionado
-            e.target.classList.add('horas__hora--seleccionada');
+            e.target.classList.add('horas__hora--seleccionada')
 
-            inputHiddenHora.value = e.target.dataset.horaId;
+            inputHiddenHora.value = e.target.dataset.horaId
 
-            // Llena el campo oculto de dia
-            inputHiddenDia.value = document.querySelector('[name="dia"]:checked').value;
-
-   
+            // Llenar el campo oculto de dia
+            inputHiddenDia.value = document.querySelector('[name="dia"]:checked').value
         }
-
-
-
-
     }
-
+    
 })();

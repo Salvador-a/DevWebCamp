@@ -19,7 +19,9 @@ class Paginacion {
     }
 
     public function total_paginas() {
-        return ceil($this->total_registros / $this->registros_por_pagina);
+        $total = ceil($this->total_registros / $this->registros_por_pagina);
+        $total == 0 ? $total = 1 : $total = $total;
+        return $total;
     }
 
     public function pagina_anterior() {
@@ -35,10 +37,9 @@ class Paginacion {
     public function enlace_anterior() {
         $html = '';
         if($this->pagina_anterior()) {
-            $html .= "<a class=\"paginacion__enlace paginacion__enlace--texto\" href=\"?page={$this->pagina_anterior()}\">&laquo; Anterior</a>";
+            $html .= "<a class=\"paginacion__enlace paginacion__enlace--texto\" href=\"?page={$this->pagina_anterior()}\">&laquo; Anterior </a>";
         }
-        return $html;	 
-
+        return $html;
     }
 
     public function enlace_siguiente() {
@@ -49,18 +50,16 @@ class Paginacion {
         return $html;
     }
 
-    public function numero_paginas() {
+    public function numeros_paginas() {
         $html = '';
         for($i = 1; $i <= $this->total_paginas(); $i++) {
-            if($i === $this->pagina_actual) {
-                $html .= "<span class=\"paginacion__enlace paginacion__enlace--actual\">{$i}</span>";
+            if($i === $this->pagina_actual ) {
+                $html .= "<span class=\"paginacion__enlace paginacion__enlace--actual \">{$i}</span>";
             } else {
-
-                $html .= "<a class=\"paginacion__enlace paginacion__enlace--numero\" href=\"?page={$i}\">{$i}</a>";
+                $html .= "<a class=\"paginacion__enlace paginacion__enlace--numero \" href=\"?page={$i}\">{$i}</a>";
             }
-
         }
-        
+
         return $html;
     }
 
@@ -69,14 +68,12 @@ class Paginacion {
         if($this->total_registros > 1) {
             $html .= '<div class="paginacion">';
             $html .= $this->enlace_anterior();
-            $html .= $this->numero_paginas();
+            $html .= $this->numeros_paginas();
             $html .= $this->enlace_siguiente();
             $html .= '</div>';
         }
 
         return $html;
-
     }
-    
 
 }

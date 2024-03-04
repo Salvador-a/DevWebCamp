@@ -161,8 +161,11 @@ class ActiveRecord {
     }
 
     // Traer todos los registros
-    public static function total() {
+    public static function total($columna = '', $valor= '') {
         $query = "SELECT COUNT(*) FROM " . static::$tabla ;
+        if ($columna) {
+            $query .= " WHERE {$columna} = '{$valor}'";
+        }
         $resultaqdo = self::$db->query($query);
         $total = $resultaqdo->fetch_array();
         return array_shift($total);

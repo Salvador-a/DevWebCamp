@@ -11,6 +11,7 @@ use Model\Paquete;
 use Model\Ponente;
 use Model\Usuario;
 use Model\Registro;
+use Model\EventosRegistros;
 use Model\Categoria;
 
 class RegistroController {
@@ -19,13 +20,20 @@ class RegistroController {
 
         if(!is_auth()) {
             header('Location: /');
+            return;
         }
 
         // Verificar si el usuario ya tiene un registro
         $registro = Registro::where('usuario_id', $_SESSION['id']);
 
-        if(isset($registro)&& $registro->paquete_id === '3') {
+        if(isset($registro) && ($registro->paquete_id === '3' || $registro->paquete_id === '2')) {
             header('Location: /boleto?id=' . urlencode($registro->token));
+            return;
+        }
+
+        if(isset($registro) && $registro->paquete_id === "1") {
+            header('Location: /finalizar-registro/conferencias');
+            return;
         }
 
         $router->render('registro/crear', [
@@ -39,6 +47,7 @@ class RegistroController {
        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            if(!is_auth()) {
                header('Location: /login');
+                return;
            }
 
            
@@ -47,22 +56,24 @@ class RegistroController {
 
             if(isset($registro)&& $registro->paquete_id === '3') {
                 header('Location: /boleto?id=' . urlencode($registro->token));
+                return;
             }
 
            $token = substr(md5(uniqid( rand(), true )), 0, 8);
            // Crear registro
-           $datos = array(
+           $datos = [
                'paquete_id' => 3,
                'pago_id' => '',
                'token' => $token,
                'usuario_id' => $_SESSION['id']
-           );
+           ];
 
               $registro = new Registro($datos);
               $resultado = $registro->guardar();
 
               if($resultado) {
                   header('Location: /boleto?id=' . urlencode($token));
+                  return;
               }
         }
 
@@ -75,12 +86,14 @@ class RegistroController {
 
         if(!$id || !strlen($id) === 8) {
             header('Location: /');
+            return;
         }
 
         // Buscar en la base de datos
         $registro = Registro::where('token', $id);
         if(!$registro) {
             header('Location: /');
+            return;
         }
 
         // Llenar las tablas de referencia
@@ -133,14 +146,28 @@ class RegistroController {
 
         if(!is_auth()) {
             header('Location: /login');
+            return;
         }
         
         // Validar que el usuario tenga el plan precencial
-        $usuario = $_SESSION['id'];
-        $registro = Registro::where('usuario_id', $usuario);
+        $usuario_id = $_SESSION['id'];
+        $registro = Registro::where('usuario_id', $usuario_id);
 
-        if($registro->paquete_id !== '1') {
+
+        if(isset($registro) && $registro->paquete_id === "2") {
+            header('Location: /boleto?id=' . urlencode($registro->token));
+            return;
+        }
+
+        if($registro->paquete_id !== "1") {
             header('Location: /');
+            return;
+        }
+
+        // Redireccionar a boleto virtusl rn caso de haber finalizado el registro
+        if(isset($registro->regalo_id) && $registro->regalo_id === '1') {
+            header('Location: /boleto?id=' . urlencode($registro->token));
+            return;
         }
 
         $eventos = Evento::ordenar('hora_id', 'ASC');
@@ -178,6 +205,7 @@ class RegistroController {
             // Revisar que el usuario este autenticado
             if(!is_auth()) {
                 header('Location: /login');
+                return;
             }
 
             $eventos = explode(',', $_POST['eventos']);
@@ -218,8 +246,31 @@ class RegistroController {
                 $evento->guardar();
 
                 // Almacenar el registro en la base de datos
-                
+                $datos = [
+                    'evento_id' => (int) $evento->id,
+                    'registro_id' => (int) $registro->id
+                ];
+
+                $registro_usuario = new EventosRegistros($datos);
+                $registro_usuario->guardar();
             }
+
+            // Almacenar el regalo
+            $registro->sincronizar(['regalo_id' => $_POST['regalo_id']]);
+            $resultado = $registro->guardar();
+
+            if($resultado) {
+                echo json_encode([
+                    'resultado' => $resultado,
+                    'token' => $registro->token
+                ]);
+            } else {
+                echo json_encode([
+                    'resultado' => false
+                ]);
+            }
+
+            return;
 
         }
 
